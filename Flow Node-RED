@@ -1,0 +1,54 @@
+IF occupancy == true
+AND command == "OFF"
+AND device == "lamp"
+→ BLOCK command
+→ Send warning to dashboard
+
+
+IF occupancy == false
+AND device == "washer" OR "pump"
+→ ALLOW remote OFF
+
+
+[
+  {
+    "id": "mqtt-in-lamp",
+    "type": "mqtt in",
+    "name": "Lamp Status",
+    "topic": "rumah/jogja01/+/lamp/status",
+    "broker": "mqtt-broker",
+    "x": 120,
+    "y": 80,
+    "wires": [["debug-lamp"]]
+  },
+  {
+    "id": "mqtt-in-occupancy",
+    "type": "mqtt in",
+    "name": "Occupancy",
+    "topic": "rumah/jogja01/+/occupancy",
+    "broker": "mqtt-broker",
+    "x": 120,
+    "y": 140,
+    "wires": [["function-check"]]
+  },
+  {
+    "id": "function-check",
+    "type": "function",
+    "name": "Safety Check",
+    "func": "if(msg.payload.presence === true && msg.payload.cmd === 'OFF'){\n  return null;\n}\nreturn msg;",
+    "outputs": 1,
+    "x": 350,
+    "y": 140,
+    "wires": [["mqtt-out"]]
+  },
+  {
+    "id": "mqtt-out",
+    "type": "mqtt out",
+    "name": "Command Output",
+    "topic": "rumah/jogja01/cmd_response",
+    "broker": "mqtt-broker",
+    "x": 580,
+    "y": 140,
+    "wires": []
+  }
+]
