@@ -1,0 +1,36 @@
+iot-smart-home-jogja/
+│
+├── README.md
+│
+├── docs/
+│   ├── arsitektur_sistem.png
+│   ├── wiring_kamar.png
+│   ├── wiring_utilitas.png
+│   │
+│   ├── foto_perangkat/
+│   │   ├── esp32_kamar.jpg
+│   │   ├── sensor_pir.jpg
+│   │   └── relay_module.jpg
+│   │
+│   └── dashboard/
+│       ├── dashboard_home.png
+│       ├── dashboard_kamar.png
+│       └── dashboard_utilitas.png
+│
+├── esp32/
+│   ├── kamar_node/
+│   │   └── kamar_node.ino
+│   │
+│   └── utilitas_node/
+│       └── utilitas_node.ino
+│
+├── node-red/
+│   └── flow_smart_home.json
+│
+├── dashboard/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+└── mqtt/
+    └── topic_payload.md
