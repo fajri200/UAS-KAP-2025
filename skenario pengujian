@@ -1,0 +1,86 @@
+Skenario Pengujian Sistem 
+
+Bagian ini WAJIB ADA di laporan dan sering jadi poin penilaian.
+
+A. Tujuan Pengujian
+
+Pengujian dilakukan untuk memastikan bahwa:
+
+Sistem monitoring berjalan real-time
+
+Aturan keselamatan diterapkan dengan benar
+
+Kontrol jarak jauh tidak melanggar privasi dan keamanan penghuni
+
+B. Skenario Pengujian Fungsional
+Skenario 1: Deteksi Keberadaan Penghuni
+Komponen	Keterangan
+Input	Gerakan di depan sensor PIR
+Proses	ESP32 membaca PIR
+Output	MQTT publish occupancy = true
+Hasil	Status kamar di dashboard berubah menjadi “Dihuni”
+
+Hasil Diharapkan:
+Dashboard menampilkan kamar sedang dihuni.
+
+Skenario 2: Lampu Menyala Saat Kamar Kosong
+Komponen	Keterangan
+Input	Lampu ON, PIR tidak mendeteksi gerakan
+Proses	ESP32 publish lamp status
+Output	Dashboard menampilkan “Lampu ON”
+Hasil	Pemilik mengetahui lampu menyala tanpa penghuni
+
+Hasil Diharapkan:
+Pemilik dapat memantau pemborosan listrik.
+
+Skenario 3: Larangan Mematikan Lampu Saat Dihuni (Safety Rule)
+Komponen	Keterangan
+Input	Perintah OFF dari dashboard
+Kondisi	Occupancy = true
+Proses	ESP32 menolak perintah
+Output	Lampu tetap menyala
+Hasil	Keamanan dan kenyamanan penghuni terjaga
+
+Hasil Diharapkan:
+Lampu tidak mati meskipun ada perintah remote.
+
+Ini poin KRUSIAL UAS
+
+Skenario 4: Kontrol Mesin Cuci Saat Rumah Kosong
+Komponen	Keterangan
+Input	Perintah OFF mesin cuci
+Kondisi	Occupancy = false
+Proses	Relay memutus listrik
+Output	Mesin cuci mati
+Hasil	Pemakaian listrik terkendali
+
+Hasil Diharapkan:
+Mesin cuci berhasil dimatikan dari jarak jauh.
+
+Skenario 5: Kegagalan Jaringan MQTT
+Komponen	Keterangan
+Input	WiFi terputus
+Proses	ESP32 retry koneksi
+Output	Dashboard status offline
+Hasil	Sistem aman dan tidak error
+C. Kesimpulan Pengujian
+
+Berdasarkan pengujian yang dilakukan, sistem IoT Smart Home:
+
+Berjalan sesuai kebutuhan pengguna
+
+Tidak melanggar privasi penghuni
+
+Menerapkan kontrol dan pembatasan dengan benar
+
+Stabil dalam komunikasi berbasis MQTT
+
+Status Proyek Anda Sekarang
+
+✔ README lengkap
+✔ Arsitektur sistem
+✔ Wiring diagram
+✔ ESP32 code
+✔ Node-RED flow
+✔ Dashboard web
+✔ Skenario pengujian UAS
