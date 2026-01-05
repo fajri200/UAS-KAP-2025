@@ -52,6 +52,9 @@ void reconnect() {
   }
 }
 
+
+
+
 void loop() {
   if (!client.connected()) reconnect();
   client.loop();
@@ -62,3 +65,19 @@ void loop() {
 
   delay(2000);
 }
+
+#define RELAY_WASHER 25
+#define RELAY_PUMP 27
+
+void setup() {
+  pinMode(RELAY_WASHER, OUTPUT);
+  pinMode(RELAY_PUMP, OUTPUT);
+
+  digitalWrite(RELAY_WASHER, LOW);
+  digitalWrite(RELAY_PUMP, LOW);
+}
+
+void loop() {
+  // relay dikontrol via MQTT
+}
+
