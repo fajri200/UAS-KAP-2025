@@ -1,0 +1,172 @@
+IoT Smart Home Monitoring untuk Rumah Sewa Wisata di Jogja
+a. Judul & Ringkasan Cara Kerja Sistem
+Judul
+
+Sistem Monitoring dan Kontrol Smart Home Berbasis IoT Menggunakan MQTT untuk Rumah Sewa Wisata
+
+Ringkasan
+
+Sistem ini dirancang untuk membantu pemilik rumah sewa wisata di daerah Jogja dalam memantau kondisi rumah secara real-time tanpa melanggar privasi penyewa. Sistem tidak menggunakan kamera atau mikrofon, melainkan memanfaatkan sensor gerak, sensor arus listrik, dan kontrol relay.
+
+Pemilik rumah dapat:
+
+Memantau status lampu di setiap kamar
+
+Mengetahui apakah rumah sedang dihuni atau kosong
+
+Memantau penggunaan mesin cuci dan pompa air
+
+Mematikan mesin cuci dan pompa air dari jarak jauh hanya ketika rumah tidak dihuni
+
+Komunikasi data dilakukan menggunakan MQTT, sedangkan pemantauan ditampilkan melalui dashboard web.
+
+b. Hardware dan Software / Tools yang Digunakan
+Hardware
+
+ESP32 (4 unit)
+
+3 unit untuk masing-masing kamar
+
+1 unit untuk utilitas (mesin cuci & pompa air)
+
+Sensor PIR (HC-SR501 / AM312)
+
+Relay Module AC (5V, optocoupler)
+
+Sensor Arus (SCT-013 / ACS712)
+
+Lampu AC
+
+Mesin Cuci
+
+Pompa Air
+
+Router WiFi
+
+Power Supply 5V
+
+Raspberry Pi (sebagai server lokal MQTT & backend)
+
+Software / Tools
+
+Arduino IDE / PlatformIO
+
+Mosquitto MQTT Broker
+
+Node-RED
+
+InfluxDB
+
+Grafana / Dashboard Web (HTML, CSS, JavaScript)
+
+MQTT.js
+
+Git & GitHub
+
+c. Gambar Rangkaian (Wiring Diagram)
+
+ Wiring Diagram Kamar (ESP32 + PIR + Relay Lampu)
+(Letakkan gambar di folder /docs/wiring_kamar.png)
+
+ESP32 GPIO --> Relay IN --> Lampu AC
+ESP32 GPIO --> PIR OUT
+ESP32 VCC  --> PIR VCC
+ESP32 GND  --> PIR GND & Relay GND
+
+
+ Wiring Diagram Utilitas (Mesin Cuci & Pompa Air)
+(Letakkan gambar di folder /docs/wiring_utilitas.png)
+
+d. Gambar Arsitektur Aplikasi dan Jaringan Komputer
+
+📌 Arsitektur Sistem IoT Smart Home
+
+(Letakkan gambar di folder /docs/arsitektur_sistem.png)
+
+ESP32 Nodes → WiFi Router → MQTT Broker (Raspberry Pi)
+                         → Node-RED → Dashboard Web
+                         → InfluxDB → Grafana
+
+e. Topik & Payload MQTT
+Contoh Topik MQTT
+Topik	Deskripsi
+rumah/jogja01/kamar1/occupancy	Status keberadaan orang
+rumah/jogja01/kamar1/lamp/status	Status lampu
+rumah/jogja01/kamar1/lamp/cmd	Perintah lampu
+rumah/jogja01/util/washer/power	Daya mesin cuci
+rumah/jogja01/util/pump/cmd	Kontrol pompa air
+Contoh Payload
+
+Status Lampu
+
+{
+  "state": "ON",
+  "timestamp": "2025-01-05 10:30:00"
+}
+
+
+Perintah Mematikan Pompa
+
+{
+  "command": "OFF",
+  "source": "dashboard"
+}
+
+f. Cara Instalasi
+
+Clone repositori GitHub
+
+git clone https://github.com/username/iot-smart-home-jogja.git
+
+
+Install Mosquitto MQTT Broker
+
+sudo apt install mosquitto mosquitto-clients
+
+
+Install Node-RED
+
+npm install -g --unsafe-perm node-red
+
+
+Upload program ESP32 menggunakan Arduino IDE
+
+Jalankan MQTT Broker dan Node-RED
+
+g. Cara Pengoperasian dan Pengujian
+Pengoperasian
+
+Nyalakan seluruh node ESP32
+
+Akses dashboard melalui browser
+
+Pantau status lampu dan penggunaan listrik
+
+Kontrol mesin cuci dan pompa saat rumah kosong
+
+Pengujian
+
+Uji sensor PIR mendeteksi keberadaan
+
+Uji larangan mematikan lampu saat kamar dihuni
+
+Uji pemutusan mesin cuci dari dashboard
+
+Uji koneksi MQTT saat jaringan terputus
+
+h. Contoh Hasil Pengoperasian dan Pengujian
+
+Lampu kamar terdeteksi menyala saat kamar kosong
+
+Sistem menolak perintah mematikan lampu saat ada penghuni
+
+Mesin cuci berhasil dimatikan dari jarak jauh saat tidak digunakan
+
+Grafik penggunaan daya tampil di dashboard
+
+
+
+Anggota Kelompok
+arsyad fajri(2022071046)
+
+Nama 1 – NIM
