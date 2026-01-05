@@ -1,0 +1,114 @@
+IMPLEMENTASI SISTEM**
+
+4.1 Gambaran Umum Implementasi Sistem
+
+Bab ini menjelaskan proses implementasi sistem IoT Smart Home yang dirancang untuk memantau dan mengendalikan penggunaan listrik pada rumah sewa wisata di daerah Jogja. Implementasi dilakukan dengan memanfaatkan beberapa node mikrokontroler ESP32, sensor non-visual, aktuator berupa relay, server MQTT sebagai media komunikasi data, serta dashboard berbasis web sebagai antarmuka pemantauan.
+
+Sistem dirancang dengan mempertimbangkan aspek privasi penyewa, sehingga tidak menggunakan kamera maupun mikrofon. Seluruh proses pemantauan dilakukan berdasarkan data sensor gerak (PIR), status lampu, dan konsumsi daya peralatan listrik tertentu seperti mesin cuci dan pompa air.
+
+4.2 Implementasi Perangkat Keras (Hardware)
+4.2.1 Node Kamar
+
+Setiap kamar dilengkapi dengan satu buah mikrokontroler ESP32 yang berfungsi sebagai node pemantauan dan kontrol. Node ini terhubung dengan:
+
+Sensor PIR untuk mendeteksi keberadaan penghuni
+
+Modul relay untuk mengendalikan lampu kamar
+
+ESP32 membaca status sensor PIR secara berkala dan mengirimkan informasi keberadaan penghuni ke server MQTT. Selain itu, ESP32 juga menerima perintah pengendalian lampu dari server, namun dilengkapi dengan logika pengaman agar lampu tidak dapat dimatikan dari jarak jauh ketika kamar sedang dihuni.
+
+4.2.2 Node Utilitas
+
+Node utilitas digunakan untuk memantau dan mengendalikan peralatan listrik utama, yaitu mesin cuci dan pompa air. Node ini terdiri dari:
+
+ESP32 sebagai pengendali utama
+
+Sensor arus untuk memantau konsumsi listrik
+
+Relay AC untuk memutus atau menyambungkan aliran listrik
+
+Node utilitas menerima perintah dari server MQTT dan hanya mengizinkan pemutusan listrik ketika rumah dalam kondisi tidak dihuni.
+
+4.3 Implementasi Perangkat Lunak (Software)
+4.3.1 MQTT Broker dan Backend
+
+Server MQTT diimplementasikan menggunakan Mosquitto yang berjalan pada Raspberry Pi. MQTT digunakan sebagai protokol komunikasi utama karena ringan dan cocok untuk sistem IoT.
+
+Node-RED digunakan sebagai backend untuk:
+
+Menerima data dari node ESP32
+
+Menerapkan aturan keselamatan (safety rules)
+
+Meneruskan data ke dashboard web
+
+4.3.2 Implementasi Dashboard Web
+
+Dashboard web dikembangkan menggunakan HTML, CSS, dan JavaScript dengan bantuan library MQTT.js. Dashboard menampilkan informasi secara real-time, antara lain:
+
+Status keberadaan penghuni di setiap kamar
+
+Status lampu
+
+Status dan kontrol mesin cuci serta pompa air
+
+Dashboard hanya berfungsi sebagai antarmuka pengguna. Keputusan akhir terkait eksekusi perintah tetap ditentukan oleh node ESP32 dan backend untuk menjaga keamanan sistem.
+
+4.4 Implementasi Aturan Keselamatan Sistem
+
+Untuk menjaga kenyamanan dan keamanan penyewa, sistem menerapkan beberapa aturan keselamatan, yaitu:
+
+Lampu kamar tidak dapat dimatikan dari jarak jauh ketika sensor PIR mendeteksi keberadaan penghuni.
+
+Mesin cuci dan pompa air hanya dapat dimatikan dari jarak jauh ketika rumah tidak dihuni.
+
+Seluruh perintah dan respons dicatat melalui komunikasi MQTT.
+
+Aturan ini diimplementasikan baik pada level node ESP32 maupun pada backend Node-RED.
+
+**BAB V
+
+PENGUJIAN SISTEM**
+
+5.1 Tujuan Pengujian
+
+Pengujian sistem dilakukan untuk memastikan bahwa seluruh komponen sistem IoT Smart Home berfungsi sesuai dengan kebutuhan yang telah ditentukan. Pengujian juga bertujuan untuk memverifikasi penerapan aturan keselamatan serta keandalan komunikasi berbasis MQTT.
+
+5.2 Metode Pengujian
+
+Metode pengujian yang digunakan adalah pengujian fungsional (functional testing), di mana setiap fungsi utama sistem diuji berdasarkan skenario penggunaan nyata. Pengujian dilakukan dengan mengamati respons sistem terhadap berbagai kondisi lingkungan dan perintah pengguna melalui dashboard web.
+
+5.3 Hasil Pengujian Sistem
+5.3.1 Pengujian Deteksi Keberadaan Penghuni
+
+Pengujian dilakukan dengan memberikan gerakan di depan sensor PIR pada node kamar. Hasil pengujian menunjukkan bahwa ESP32 berhasil mendeteksi keberadaan dan mengirimkan status tersebut ke server MQTT. Dashboard web menampilkan status kamar sebagai “Dihuni” secara real-time.
+
+5.3.2 Pengujian Monitoring Lampu
+
+Pada kondisi kamar kosong, lampu dinyalakan secara manual. Sistem berhasil mendeteksi bahwa lampu menyala sementara tidak terdapat penghuni di dalam kamar. Informasi ini ditampilkan pada dashboard sehingga pemilik dapat mengetahui potensi pemborosan listrik.
+
+5.3.3 Pengujian Aturan Larangan Mematikan Lampu
+
+Ketika kamar dalam kondisi dihuni, dilakukan percobaan untuk mematikan lampu melalui dashboard web. Hasil pengujian menunjukkan bahwa perintah tersebut ditolak oleh sistem, dan lampu tetap menyala. Hal ini membuktikan bahwa aturan keselamatan sistem berjalan dengan baik.
+
+5.3.4 Pengujian Kontrol Mesin Cuci dan Pompa Air
+
+Pada kondisi rumah tidak dihuni, dilakukan perintah untuk mematikan mesin cuci dan pompa air melalui dashboard. Sistem berhasil mengeksekusi perintah tersebut dengan memutus aliran listrik melalui relay. Kondisi ini menunjukkan bahwa kontrol jarak jauh bekerja sesuai dengan ketentuan.
+
+5.3.5 Pengujian Kegagalan Koneksi Jaringan
+
+Pengujian dilakukan dengan memutus koneksi jaringan WiFi. Node ESP32 secara otomatis mencoba melakukan koneksi ulang, dan dashboard menampilkan kondisi perangkat sebagai tidak terhubung. Setelah jaringan kembali normal, sistem dapat beroperasi kembali tanpa kesalahan.
+
+5.4 Kesimpulan Pengujian
+
+Berdasarkan hasil pengujian yang telah dilakukan, dapat disimpulkan bahwa sistem IoT Smart Home yang dikembangkan:
+
+Berhasil memantau kondisi rumah secara real-time
+
+Mampu mengendalikan peralatan listrik sesuai aturan yang ditetapkan
+
+Menjaga privasi dan kenyamanan penyewa
+
+Memiliki komunikasi data yang stabil menggunakan protokol MQTT
+
+Dengan demikian, sistem ini dinilai layak dan sesuai untuk diterapkan pada rumah sewa wisata.
